@@ -1,5 +1,6 @@
 import hero from './hero.jpg'
 import roar from './roar.png'
+import sagar from './sagar.png'
 import meta from './meta.png'
 import shopify from './shopify.png'
 import sss from './sss.svg'
@@ -12,6 +13,7 @@ import logo from './logo.svg'
 export {
     hero,
     roar,
+    sagar,
     meta,
     shopify,
     sss,

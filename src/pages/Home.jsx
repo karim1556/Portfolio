@@ -8,6 +8,7 @@ import Plane from '../models/Plane'
 import HomeInfo from '../components/HomeInfo'
 import { soundoff, soundon } from "../assets/icons";
 import Rickroll from "../assets/Rickroll.mp3";
+import Blog from './Blog'
 
 
 
@@ -87,6 +88,7 @@ const home = () => {
      setIsRotating = {setIsRotating}
      setCurrentStage={setCurrentStage}
      />
+     <Blog/>
     </Suspense>
     </Canvas>
     <div className='absolute bottom-2 left-2'>

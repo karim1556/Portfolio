@@ -27,5 +27,8 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: ["light", "dark","cyberpunk","valentine"], // Enable light and dark themes
+  },
 }

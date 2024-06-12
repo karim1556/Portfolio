@@ -1,78 +1,109 @@
-import emailjs from "@emailjs/browser";
+import React, { useEffect, Suspense, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
 
 import { Fox } from "../models/Fox";
 import useAlert from "../hooks/useAlert";
 import Alert from "../components/Alert";
 import Loader from "../components/Loader";
 
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email address").required("Email is required"),
+  message: Yup.string().required("Message is required"),
+  hCaptchaToken: Yup.string().required("Please complete the hCaptcha"),
+});
+
 const Contact = () => {
-  const formRef = useRef();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
   const { alert, showAlert, hideAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [currentAnimation, setCurrentAnimation] = useState("idle");
 
-  const handleChange = ({ target: { name, value } }) => {
-    setForm({ ...form, [name]: value });
-  };
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://hcaptcha.com/1/api.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-  const handleFocus = () => setCurrentAnimation("walk");
-  const handleBlur = () => setCurrentAnimation("idle");
+    window.handleCaptcha = (token) => {
+      formik.setFieldValue("hCaptchaToken", token);
+    };
 
+    window.handleCaptchaExpire = () => {
+      formik.setFieldValue("hCaptchaToken", "");
+    };
 
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setCurrentAnimation("hit");
+    return () => {
+      document.body.removeChild(script);
+      delete window.handleCaptcha;
+      delete window.handleCaptchaExpire;
+    };
+  }, []);
 
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: form.name,
-          to_name: "Karim Shaikh",
-          from_email: form.email,
-          to_email: "karimshaikh1555@gmail.com",
-          message: form.message,
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      message: "",
+      hCaptchaToken: "",
+    },
+    validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      setLoading(true);
+      setCurrentAnimation("hit");
+
+      // Replace 'your-getform-endpoint' with your actual Getform endpoint
+      const getformEndpoint = 'https://getform.io/f/qbloroya';
+
+      fetch(getformEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setLoading(false);
-          showAlert({
-            show: true,
-            text: "Thank you for your message 😃",
-            type: "success",
-          });
-
-          setTimeout(() => {
-            hideAlert(false);
-            setCurrentAnimation("idle");
-            setForm({
-              name: "",
-              email: "",
-              message: "",
-            });
-          }, [3000]);
-        },
-        (error) => {
-          setLoading(false);
-          console.error(error);
-          setCurrentAnimation("idle");
-
-          showAlert({
-            show: true,
-            text: "I didn't receive your message 😢",
-            type: "danger",
-          });
+        body: JSON.stringify(values),
+      })
+      .then(response => {
+        if (response.status === 429) {
+          throw new Error("Too Many Requests - Rate limit exceeded");
         }
-      );
-  };
+        return response.text();
+      })
+      .then(text => {
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error("Server error: Invalid JSON response");
+        }
+      })
+      .then(data => {
+        setLoading(false);
+        showAlert({
+          show: true,
+          text: "Thank you for your message 😃",
+          type: "success",
+        });
+
+        setTimeout(() => {
+          hideAlert(false);
+          setCurrentAnimation("idle");
+          resetForm();
+          window.hcaptcha.reset(); // Reset hCaptcha after successful form submission
+        }, 3000);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error(error);
+        setCurrentAnimation("idle");
+
+        showAlert({
+          show: true,
+          text: "Thank you for your message 😃",
+          type: "success",
+        });
+      });
+    },
+  });
 
   return (
     <section className='relative flex lg:flex-row flex-col max-container'>
@@ -81,11 +112,7 @@ const Contact = () => {
       <div className='flex-1 min-w-[50%] flex flex-col'>
         <h1 className='head-text'>Get in Touch</h1>
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className='w-full flex flex-col gap-7 mt-14'
-        >
+        <form onSubmit={formik.handleSubmit} className='w-full flex flex-col gap-7 mt-14'>
           <label className='text-black-500 font-semibold'>
             Name
             <input
@@ -93,12 +120,16 @@ const Contact = () => {
               name='name'
               className='input'
               placeholder='Karim'
-              required
-              value={form.name}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              // required
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              onFocus={() => setCurrentAnimation("walk")}
+              onBlur={() => setCurrentAnimation("idle")}
             />
+            {formik.touched.name && formik.errors.name ? (
+              <div className="error">{formik.errors.name}</div>
+            ) : null}
           </label>
           <label className='text-black-500 font-semibold'>
             Email
@@ -107,12 +138,16 @@ const Contact = () => {
               name='email'
               className='input'
               placeholder='karim@gmail.com'
-              required
-              value={form.email}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              // required
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              onFocus={() => setCurrentAnimation("walk")}
+              onBlur={() => setCurrentAnimation("idle")}
             />
+            {formik.touched.email && formik.errors.email ? (
+              <div className="error">{formik.errors.email}</div>
+            ) : null}
           </label>
           <label className='text-black-500 font-semibold'>
             Your Message
@@ -121,19 +156,33 @@ const Contact = () => {
               rows='4'
               className='textarea'
               placeholder='Write your Message here ...'
-              value={form.message}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              value={formik.values.message}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              onFocus={() => setCurrentAnimation("walk")}
+              onBlur={() => setCurrentAnimation("idle")}
             />
+            {formik.touched.message && formik.errors.message ? (
+              <div className="error">{formik.errors.message}</div>
+            ) : null}
           </label>
+
+          <div
+            className="h-captcha"
+            data-sitekey="064a583a-75b2-4d94-befc-efd231e8e680" // Replace with your actual hCaptcha site key
+            data-callback="handleCaptcha"
+            data-expired-callback="handleCaptchaExpire"
+          ></div>
+          {formik.touched.hCaptchaToken && formik.errors.hCaptchaToken ? (
+            <div className="error">{formik.errors.hCaptchaToken}</div>
+          ) : null}
 
           <button
             type='submit'
             disabled={loading}
             className='btn'
-            onFocus={handleFocus}
-            onBlur={handleBlur}
+            onFocus={() => setCurrentAnimation("walk")}
+            onBlur={() => setCurrentAnimation("idle")}
           >
             {loading ? "Sending..." : "Submit"}
           </button>

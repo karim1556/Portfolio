@@ -1,4 +1,4 @@
-import { meta, shopify,roar, starbucks,tech,sss, tesla,vidyalankar } from "../assets/images";
+import { meta, shopify,roar, starbucks,tech,sagar, tesla,vidyalankar } from "../assets/images";
 import {
     car,
     contact,
@@ -138,7 +138,7 @@ export const experiences = [
     {
         title: "Full stack Developer",
         company_name: "Sagan (an) System",
-        icon: sss,
+        icon: sagar,
         iconBg: "#a2d2ff",
         date: "Learning - Present",
         points: [
@@ -158,7 +158,7 @@ export const socialLinks = [
     {
         name: 'GitHub',
         iconUrl: github,
-        link: 'https://github.com/YourGitHubUsername',
+        link: 'https://github.com/karim1556',
     },
     {
         name: 'LinkedIn',
@@ -174,21 +174,21 @@ export const projects = [
         theme: 'btn-back-red',
         name: 'Bicyle Shop',
         description: 'Developed a website to book bicycles in Dublin.',
-        link: '#',
+        link: 'https://github.com/karim1556',
     },
     {
         iconUrl: threejs,
         theme: 'btn-back-green',
         name: 'Portfolio using three js',
         description: 'Created a portfolio using three.js by exporting its various functions and everything.',
-        link: '#',
+        link: 'https://github.com/karim1556',
     },
     {
         iconUrl: car,
         theme: 'btn-back-blue',
         name: 'Car Rental App',
         description: 'Designed and built a website for renting cars on the market, streamlining the car-buying process.',
-        link: '#',
+        link: 'https://github.com/karim1556',
     },
     // {
     //     iconUrl: snapgram,
