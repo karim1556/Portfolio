@@ -1,12 +1,13 @@
+// src/pages/Contact.jsx
 import React, { useEffect, Suspense, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Canvas } from "@react-three/fiber";
-
 import { Fox } from "../models/Fox";
 import useAlert from "../hooks/useAlert";
 import Alert from "../components/Alert";
 import Loader from "../components/Loader";
+import apiUrl from '../config'; // Import the apiUrl
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -53,7 +54,7 @@ const Contact = () => {
       setLoading(true);
       setCurrentAnimation("hit");
 
-      fetch('http://localhost:5000/api/contact', {
+      fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -197,7 +198,6 @@ const Contact = () => {
               position={[0.5, 0.35, 0]}
               rotation={[12.629, -0.6, 0]}
               scale={[0.5, 0.5, 0.5]}
-
             />
           </Suspense>
         </Canvas>
