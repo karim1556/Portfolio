@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import axios from 'axios';
-import twilio from 'twilio';
+// import twilio from 'twilio';
 
 dotenv.config();
 
@@ -30,8 +30,8 @@ const contactSchema = new mongoose.Schema({
 
 const Contact = mongoose.model('Contact', contactSchema);
 
-// {twilio}
-const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+// // {twilio}
+// const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 app.post('/api/contact', async (req, res) => {
   const { name, email, message, hCaptchaToken } = req.body;
@@ -49,14 +49,14 @@ app.post('/api/contact', async (req, res) => {
       text: telegramText,
     });
 
-    // {whatsapp notif}
-    const whatsappText = `New contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`;
+    // // {whatsapp notif}
+    // const whatsappText = `New contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`;
 
-    await client.messages.create({
-      from: process.env.TWILIO_WHATSAPP_FROM,
-      to: process.env.WHATSAPP_TO,
-      body: whatsappText,
-    });
+    // await client.messages.create({
+    //   from: process.env.TWILIO_WHATSAPP_FROM,
+    //   to: process.env.WHATSAPP_TO,
+    //   body: whatsappText,
+    // });
 
     res.status(201).json({ message: 'message received!' });
   } catch (error) {
