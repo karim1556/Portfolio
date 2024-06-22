@@ -11,9 +11,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -21,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+// Contact schema and model
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -30,16 +33,22 @@ const contactSchema = new mongoose.Schema({
 
 const Contact = mongoose.model('Contact', contactSchema);
 
-// // {twilio}
+// // Twilio client
 // const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to the API!');
+});
+
+// Contact form route
 app.post('/api/contact', async (req, res) => {
   const { name, email, message, hCaptchaToken } = req.body;
   try {
     const newContact = new Contact({ name, email, message, hCaptchaToken });
     await newContact.save();
 
-    // {telegram notif}
+    // Telegram notification
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
     const telegramText = `New contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`;
@@ -49,7 +58,7 @@ app.post('/api/contact', async (req, res) => {
       text: telegramText,
     });
 
-    // // {whatsapp notif}
+    // // WhatsApp notification
     // const whatsappText = `New contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`;
 
     // await client.messages.create({
@@ -58,13 +67,14 @@ app.post('/api/contact', async (req, res) => {
     //   body: whatsappText,
     // });
 
-    res.status(201).json({ message: 'message received!' });
+    res.status(201).json({ message: 'Message received!' });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
