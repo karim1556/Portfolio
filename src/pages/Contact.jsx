@@ -53,29 +53,14 @@ const Contact = () => {
       setLoading(true);
       setCurrentAnimation("hit");
 
-      // Replace 'your-getform-endpoint' with your actual Getform endpoint
-      const getformEndpoint = 'https://getform.io/f/qbloroya';
-
-      fetch(getformEndpoint, {
+      fetch('http://localhost:5000/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       })
-      .then(response => {
-        if (response.status === 429) {
-          throw new Error("Too Many Requests - Rate limit exceeded");
-        }
-        return response.text();
-      })
-      .then(text => {
-        try {
-          return JSON.parse(text);
-        } catch {
-          throw new Error("Server error: Invalid JSON response");
-        }
-      })
+      .then(response => response.json())
       .then(data => {
         setLoading(false);
         showAlert({
@@ -98,8 +83,8 @@ const Contact = () => {
 
         showAlert({
           show: true,
-          text: "Thank you for your message 😃",
-          type: "success",
+          text: "An error occurred, please try again later",
+          type: "error",
         });
       });
     },
@@ -120,7 +105,6 @@ const Contact = () => {
               name='name'
               className='input'
               placeholder='Karim'
-              // required
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -138,7 +122,6 @@ const Contact = () => {
               name='email'
               className='input'
               placeholder='karim@gmail.com'
-              // required
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -169,7 +152,7 @@ const Contact = () => {
 
           <div
             className="h-captcha"
-            data-sitekey="064a583a-75b2-4d94-befc-efd231e8e680" // Replace with your actual hCaptcha site key
+            data-sitekey="064a583a-75b2-4d94-befc-efd231e8e680"
             data-callback="handleCaptcha"
             data-expired-callback="handleCaptchaExpire"
           ></div>
@@ -214,6 +197,7 @@ const Contact = () => {
               position={[0.5, 0.35, 0]}
               rotation={[12.629, -0.6, 0]}
               scale={[0.5, 0.5, 0.5]}
+
             />
           </Suspense>
         </Canvas>
