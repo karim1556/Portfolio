@@ -1,7 +1,9 @@
 # Portfolio
 <h1 align="center">Hi 👋, I'm Karim Shaikh</h1>
 <h3 align="center">A Student who is learning web dev</h3>
+
 ![90df6664fb0bf88a11fec12e34caf53d](https://github.com/karim1556/Portfolio/assets/70762109/bdd537dd-ed06-40b6-8a4e-e3c5dde6560b)
+
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=karim1556&label=Profile%20views&color=0e75b6&style=flat" alt="karim1556" /> </p>
 
 - 🔭 I have created this [Portfolio](https://karimportfolioreact.netlify.app/)
