@@ -10,7 +10,7 @@
 
 - 🌱 How to install ?
 
- **first download the zip file and open the file with any code editor of your choice**
+   **first download the zip file and open the file with any code editor of your choice**
 
 - 💬 How to connect to Database ?
 
