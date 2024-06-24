@@ -9,12 +9,12 @@
 - 🔭 I have created this [Portfolio](https://karimportfolioreact.netlify.app/)
 
 - 🌱 How to install ?
--
-- **first download the zip file and open the file with any code editor of your choice**
+
+ **first download the zip file and open the file with any code editor of your choice**
 
 - 💬 How to connect to Database ?
--
-- **go to mongoDB atlas and create a new cluster bt choosing M0 plan and after that go to network access select your current IP address and after go to data access and create a new user give admin privileges now go to overview and connect using drivers copy the link and password and replace it with the env file in your code and then you are all set !! after that you can host it anywhere you like on sites like render or fly.io**
+
+  **go to mongoDB atlas and create a new cluster bt choosing M0 plan and after that go to network access select your current IP address and after go to data access and create a new user give admin privileges now go to overview and connect using drivers copy the link and password and replace it with the env file in your code and then you are all set !! after that you can host it anywhere you like on sites like render or fly.io**
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
