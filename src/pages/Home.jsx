@@ -88,7 +88,6 @@ const home = () => {
      setIsRotating = {setIsRotating}
      setCurrentStage={setCurrentStage}
      />
-     <Blog/>
     </Suspense>
     </Canvas>
     <div className='absolute bottom-2 left-2'>
