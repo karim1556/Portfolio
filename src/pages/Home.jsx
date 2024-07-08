@@ -27,9 +27,9 @@ const home = () => {
       audioRef.current.play();
     }
 
-    // return () => {
-    //   audioRef.current.pause();
-    // };
+    return () => {
+      audioRef.current.pause();
+    };
   }, [isPlayingMusic]);
 
     const adjustIslandForScreenSize = () => {
