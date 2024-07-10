@@ -9,6 +9,8 @@ import tech from './tech.png'
 import tesla from './tesla.png'
 import vidyalankar from './Vidyalankar.png'
 import logo from './logo.svg'
+import logoid from './logoid.svg'
+import passwordgenerator from './passwordgenerator.svg'
 
 export {
     hero,
@@ -21,5 +23,7 @@ export {
     tech,
     tesla,
     vidyalankar,
-    logo
+    logo,
+    logoid,
+    passwordgenerator
 }

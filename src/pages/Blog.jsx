@@ -36,6 +36,16 @@ const Blog = () => {
       .catch(error => console.error('Error fetching blog posts:', error));
   }, []);
 
+  // Fetch the schema to generate avatars
+  useEffect(() => {
+    axios.get('https://api.dicebear.com/9.x/bottts-neutral/schema.json')
+      .then(response => {
+        // Handle response and determine how to use it
+        console.log('Schema:', response.data);
+      })
+      .catch(error => console.error('Error fetching DiceBear schema:', error));
+  }, []);
+
   const showAlert = ({ show, text, type }) => {
     setAlert({ show, text, type });
     setTimeout(() => setAlert({ show: false, text: '', type: '' }), 3000);
@@ -62,8 +72,9 @@ const Blog = () => {
       author: 'Bunny', // Replace with actual author data
       text: commentText,
       date: new Date(),
+      // Replace with dynamic avatar URL based on schema data
+      avatar: `https://api.dicebear.com/9.x/bottts-neutral/${encodeURIComponent(commentText)}.svg`,
     };
-
     axios.post(`${apiUrl}/api/blog/${postId}/comments`, newComment)
       .then(response => {
         if (response.data) {
@@ -74,7 +85,6 @@ const Blog = () => {
         }
       })
       .catch(error => console.error('Error adding comment:', error));
-      showAlert({ show: true, text: 'Failed to add comment', type: 'error' });
   };
 
   const handleDeletePost = (id) => {
@@ -84,7 +94,6 @@ const Blog = () => {
         setSelectedPost(null);
       })
       .catch(error => console.error('Error deleting post:', error));
-      showAlert({ show: true, text: 'Failed to delete post', type: 'error' });
   };
 
   const handleEditPost = (post) => {
@@ -112,7 +121,6 @@ const Blog = () => {
         showAlert({ show: true, text: 'Post updated successfully', type: 'success' });
       })
       .catch(error => console.error('Error updating post:', error));
-      showAlert({ show: true, text: 'Failed to update post', type: 'error' });
   };
 
   const handleNewPostChange = (e) => {
@@ -128,7 +136,6 @@ const Blog = () => {
         showAlert({ show: true, text: 'Post created successfully', type: 'success' });
       })
       .catch(error => console.error('Error creating new post:', error));
-      showAlert({ show: true, text: 'Failed to create post', type: 'error' });
   };
 
   const handleLogin = () => {
@@ -240,7 +247,10 @@ const Blog = () => {
             <ul>
               {comments.map((comment, index) => (
                 <li key={index} className="mt-2 text-gray-700 dark:text-gray-300">
-                  <strong>{comment.author}:</strong> {comment.text}
+                  <div className="flex items-center">
+                    <img src={comment.avatar} alt="Avatar" className="w-6 h-6 rounded-full mr-2" />
+                    <strong>{comment.author}:</strong> {comment.text}
+                  </div>
                 </li>
               ))}
             </ul>

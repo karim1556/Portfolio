@@ -1,4 +1,4 @@
-import { meta, shopify,roar, starbucks,tech,sagar, tesla,vidyalankar } from "../assets/images";
+import { meta, shopify,roar, starbucks,tech,sagar, tesla,vidyalankar,logoid,passwordgenerator } from "../assets/images";
 import {
     car,
     contact,
@@ -170,25 +170,25 @@ export const socialLinks = [
 
 export const projects = [
     {
-        iconUrl: logoroar,
-        theme: 'btn-back-red',
-        name: 'Bicyle Shop',
-        description: 'Developed a website to book bicycles in Dublin.',
-        link: 'https://github.com/karim1556',
+        iconUrl: logoid,
+        theme: 'btn-back-white',
+        name: 'IdeaScape',
+        description: 'Developed a website to share prompts.',
+        link: 'https://ideascape.onrender.com',
     },
     {
         iconUrl: threejs,
         theme: 'btn-back-green',
         name: 'Portfolio using three js',
         description: 'Created a portfolio using three.js by exporting its various functions and everything.',
-        link: 'https://github.com/karim1556',
+        link: 'https://karim911-portfolio.netlify.app',
     },
     {
-        iconUrl: car,
+        iconUrl: passwordgenerator,
         theme: 'btn-back-blue',
-        name: 'Car Rental App',
-        description: 'Designed and built a website for renting cars on the market, streamlining the car-buying process.',
-        link: 'https://github.com/karim1556',
+        name: 'Password Genie',
+        description: 'Designed and built a website for generating password.',
+        link: 'https://passwordgenie.netlify.app',
     },
     // {
     //     iconUrl: snapgram,
